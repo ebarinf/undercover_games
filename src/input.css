@@ -1,0 +1,19 @@
+@import "tailwindcss";
+@tailwindcss base;
+@tailwindcss components;
+@tailwindcss utilities;
+
+@layer components {
+    .title-text {
+        @apply text-[120px] font-bold text-center;
+    }
+    .btn {
+        @apply w-1/2 h-30 rounded-[30px] bg-[#1a1b22];
+    }
+    .flexcol {
+        @apply flex flex-col w-full justify-center;
+    }
+    .flexrow {
+        @apply flex flex-row w-full justify-center;
+    }
+}
