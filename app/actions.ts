@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { supabase } from '@/utils/supabase'
+import { MAX_RONDAS } from './constants'
 
 export async function unirseSala(formData: FormData) {
     const pin = (formData.get('pin-sala') as string).toUpperCase()
@@ -205,8 +206,6 @@ export async function enviarVoto(miJugadorId: string, idVotado: string, salaId: 
 }
 
 export async function siguienteRonda(salaId: string, pin: string) {
-    const MAX_RONDAS = 3
-
     const { data: sala, error: salaError } = await supabase
         .from('Sala')
         .select('id, preguntas_usadas, ronda_actual')

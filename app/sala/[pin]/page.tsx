@@ -159,6 +159,7 @@ export default function SalaPage({ params }: { params: Promise<{ pin: string }> 
     return (
       <VistaEscribiendo
         datosSala={datosSala}
+        jugadores={jugadores}
         miJugadorId={miJugadorId}
         textoRespuesta={textoRespuesta}
         onTextoRespuestaChange={setTextoRespuesta}
