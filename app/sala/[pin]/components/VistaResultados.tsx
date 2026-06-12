@@ -56,7 +56,7 @@ export default function VistaResultados({ datosSala, jugadores, isHost, pin, onS
 
         <div className="w-full rounded-xl border border-gray-700 bg-gray-900 px-4 py-4 transition-all duration-200 hover:brightness-110">
           <p className="text-sm tracking-widest text-gray-500 uppercase">Su pregunta secreta era:</p>
-          <p className="mt-2 text-lg font-semibold text-indigo-400">
+          <p className="mt-2 text-lg font-semibold text-indigo-400 break-words text-balance text-center md:text-xl">
             {datosSala.pregunta_impostor}
           </p>
         </div>

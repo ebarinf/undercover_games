@@ -26,9 +26,9 @@ export default function VistaEscribiendo({
     <main className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out flex min-h-dvh items-center justify-center bg-gray-950 px-4 text-white">
       <div className="flex w-full max-w-md flex-col items-center gap-6 text-center">
         <p className="text-sm tracking-widest text-gray-500 uppercase">Ronda {datosSala.ronda_actual}</p>
-        <p className="w-full text-2xl font-bold tracking-normal text-indigo-400 break-all md:text-3xl">
-          {esImpostor ? datosSala.pregunta_impostor : datosSala.pregunta_real}
-        </p>
+          <p className="w-full text-2xl font-bold tracking-normal text-indigo-400 break-words text-balance text-center md:text-3xl">
+            {esImpostor ? datosSala.pregunta_impostor : datosSala.pregunta_real}
+          </p>
         {haRespondido ? (
           <>
             <p className="animate-pulse text-lg font-semibold text-green-400">

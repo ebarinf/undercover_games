@@ -14,7 +14,7 @@ export default function VistaVotando({ datosSala, jugadores, miJugadorId, haVota
     <main className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out flex min-h-dvh items-center justify-center bg-gray-950 px-4 text-white">
       <div className="flex w-full max-w-md flex-col items-center gap-6 text-center">
         <p className="text-lg tracking-widest text-gray-500 uppercase">¡Hora de Votar!</p>
-        <p className="w-full text-xl font-bold tracking-normal text-indigo-400 break-all md:text-2xl">
+        <p className="w-full text-xl font-bold tracking-normal text-indigo-400 break-words text-balance text-center md:text-2xl">
           {datosSala.pregunta_real}
         </p>
         {haVotado ? (
