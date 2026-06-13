@@ -9,7 +9,7 @@ export function CreateRoomButton() {
     <button
       type="submit"
       disabled={pending}
-      className="text-sm text-gray-500 underline transition-colors hover:text-gray-300 disabled:cursor-not-allowed disabled:opacity-50"
+      className="w-full rounded-md border border-neutral-600 bg-[#ede6cd] px-4 py-3 font-typewriter font-bold tracking-wider text-neutral-800 transition-all duration-150 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
     >
       {pending ? 'Creando...' : '¿Eres el anfitrión? Crear nueva sala'}
     </button>

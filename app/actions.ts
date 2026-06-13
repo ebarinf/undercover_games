@@ -39,10 +39,25 @@ export async function crearSala(formData: FormData) {
     await supabase.rpc('limpiar_salas_vacias')
 
     const nicknameHost = formData.get('nickname_host') as string
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-    let pin = ''
-    for (let i = 0; i < 6; i++) {
-        pin += chars.charAt(Math.floor(Math.random() * chars.length))
+    const ALFABETO = 'ABCDEFGHIJKLMNPQRSTUVWXYZ'
+
+    function generarPin(): string {
+        let pin = ''
+        for (let i = 0; i < 5; i++) {
+            pin += ALFABETO[Math.floor(Math.random() * ALFABETO.length)]
+        }
+        return pin
+    }
+
+    let pin = generarPin()
+    for (;;) {
+        const { data: existente } = await supabase
+            .from('Sala')
+            .select('id')
+            .eq('codigo', pin)
+            .single()
+        if (!existente) break
+        pin = generarPin()
     }
 
     const { data: sala, error: salaError } = await supabase

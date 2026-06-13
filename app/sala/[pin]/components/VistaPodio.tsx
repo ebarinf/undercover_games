@@ -12,9 +12,15 @@ export default function VistaPodio({ jugadores, isHost, salaId }: Props) {
   const jugadoresOrdenados = [...jugadores].sort((a, b) => b.puntos - a.puntos)
 
   return (
-    <main className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out flex min-h-dvh items-center justify-center bg-gray-950 px-4 text-white">
-      <div className="flex w-full max-w-md flex-col items-center gap-8 text-center">
-        <h1 className="text-3xl font-bold text-yellow-400 md:text-4xl">
+    <main className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out flex min-h-dvh items-center justify-center bg-[#2c1d11] px-4">
+      <div
+        className="flex w-full max-w-md flex-col items-center gap-8 rounded-lg border border-neutral-700 bg-[#f4ebd0] p-6 text-center shadow-xl"
+        style={{
+          backgroundImage: 'linear-gradient(to right, #80808020 1px, transparent 1px), linear-gradient(to bottom, #80808020 1px, transparent 1px)',
+          backgroundSize: '24px 24px',
+        }}
+      >
+        <h1 className="font-typewriter text-3xl font-bold text-neutral-800 md:text-4xl">
           🏆 ¡FIN DE LA PARTIDA! 🏆
         </h1>
 
@@ -24,19 +30,19 @@ export default function VistaPodio({ jugadores, isHost, salaId }: Props) {
             return (
               <div
                 key={j.id}
-                className={`flex items-center justify-between rounded-xl border px-4 py-3 transition-all duration-200 hover:brightness-110 ${
+                className={`flex items-center justify-between rounded-lg border px-4 py-3 shadow-inner transition-all duration-200 hover:brightness-110 ${
                   esPrimero
-                    ? 'border-yellow-500 bg-yellow-500/10 shadow-lg shadow-yellow-500/20'
-                    : 'border-gray-700 bg-gray-900'
+                    ? 'border-yellow-600 bg-yellow-500/10 shadow-lg shadow-yellow-600/20'
+                    : 'border-neutral-500 bg-black/5'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   {esPrimero && <span className="text-2xl">👑</span>}
-                  <span className={`font-semibold ${esPrimero ? 'text-yellow-300' : 'text-white'}`}>
+                  <span className={`font-typewriter font-semibold ${esPrimero ? 'text-yellow-700' : 'text-neutral-800'}`}>
                     {j.nickname}
                   </span>
                 </div>
-                <span className="text-sm text-gray-400">{j.puntos} pts</span>
+                <span className="font-typewriter text-sm text-neutral-600">{j.puntos} pts</span>
               </div>
             )
           })}
@@ -45,7 +51,7 @@ export default function VistaPodio({ jugadores, isHost, salaId }: Props) {
         {isHost && (
           <button
             onClick={() => reiniciarPartida(salaId)}
-            className="w-full cursor-pointer rounded-xl bg-indigo-500 px-6 py-4 text-lg font-bold text-white shadow-lg shadow-indigo-500/30 transition-all duration-200 hover:brightness-110 hover:bg-indigo-400 active:scale-95 md:text-xl"
+            className="w-full cursor-pointer rounded-lg bg-[#5b6a38] px-6 py-4 font-typewriter text-lg font-bold text-[#f4ebd0] shadow-md transition-all duration-200 hover:brightness-110 active:scale-95 md:text-xl"
           >
             🔄 Jugar de Nuevo (Volver al Lobby)
           </button>

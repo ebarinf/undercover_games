@@ -9,7 +9,7 @@ export function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="rounded-lg bg-indigo-600 px-4 py-3 font-semibold transition-colors hover:bg-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+      className="w-full rounded-md bg-[#5b6a38] px-4 py-3 font-typewriter font-bold tracking-wider text-white transition-all duration-150 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
     >
       {pending ? 'Ingresando...' : 'Ingresar'}
     </button>
