@@ -31,7 +31,11 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-dvh items-center justify-center bg-[url('/madera-oscura.jpg')] bg-cover bg-center p-4 lg:p-8">
+    <main className="flex min-h-dvh items-center justify-center bg-cover bg-center p-4 lg:p-8"
+      style={{
+        backgroundImage: "image-set(url('/madera-oscura.webp') type('image/webp'), url('/madera-oscura.jpg') type('image/jpeg'))",
+      }}
+    >
 
         {modalAbierto && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
@@ -46,7 +50,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => setModalAbierto(false)}
-                className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-neutral-700 font-mono text-xs text-neutral-100 transition-all hover:brightness-110 active:scale-95"
+                className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full bg-neutral-700 font-mono text-xs text-neutral-100 transition-[filter,transform] hover:brightness-110 active:scale-95"
               >
                 X
               </button>
@@ -83,7 +87,7 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => setModalAbierto(false)}
-                className="mt-5 w-full rounded-lg bg-[#5b6a38] px-4 py-2.5 font-typewriter text-xs font-bold tracking-widest text-neutral-100 shadow-md transition-all duration-150 hover:brightness-110 active:scale-95"
+                className="mt-5 w-full rounded-lg bg-[#5b6a38] px-4 py-2.5 font-typewriter text-xs font-bold tracking-widest text-neutral-100 shadow-md transition-[filter,transform] duration-150 hover:brightness-110 active:scale-95"
               >
                 Cerrar
               </button>
@@ -96,7 +100,7 @@ export default function Home() {
           className="relative w-full rounded-lg border border-neutral-700 shadow-2xl lg:max-w-175"
           style={{
             backgroundImage:
-              'linear-gradient(to right, #80808012 1px, transparent 1px), linear-gradient(to bottom, #80808012 1px, transparent 1px), url(\'/textura-manila.jpg\')',
+              "linear-gradient(to right, #80808012 1px, transparent 1px), linear-gradient(to bottom, #80808012 1px, transparent 1px), image-set(url('/textura-manila.webp') type('image/webp'), url('/textura-manila.jpg') type('image/jpeg'))",
             backgroundSize: '24px 24px, 24px 24px, cover',
             backgroundPosition: '0 0, 0 0, center',
           }}
@@ -104,6 +108,7 @@ export default function Home() {
           <img
             src="/espirales-binder.png"
             alt=""
+            loading="lazy"
             className="pointer-events-none absolute left-0 -top-11 z-10 w-full select-none lg:-top-22"
           />
 
@@ -115,8 +120,8 @@ export default function Home() {
 
             <div className="relative flex rounded-full border-2 border-[#5b6a38] bg-[#5b6a38] mb-6">
               <div
-                className={`absolute top-0 h-full w-1/2 rounded-full bg-[#f4ebd0] shadow-inner transition-all duration-300 ease-in-out ${
-                  activeTab === 'unirse' ? 'left-0' : 'left-1/2'
+                className={`absolute left-0 top-0 h-full w-1/2 rounded-full bg-[#f4ebd0] shadow-inner transition-transform duration-200 ease-in-out will-change-transform ${
+                  activeTab === 'unirse' ? 'translate-x-0' : 'translate-x-full'
                 }`}
               />
 
@@ -170,7 +175,7 @@ export default function Home() {
                     type="text"
                     required
                     placeholder="EJ: 123456"
-                    className="rounded-md border border-neutral-600 bg-neutral-800/5 px-3 py-2 font-mono text-md uppercase text-neutral-800 placeholder-neutral-500 shadow-inner outline-none transition-all duration-150 focus:border-neutral-800 focus:ring-1 focus:ring-neutral-800"
+                    className="rounded-md border border-neutral-600 bg-neutral-800/5 px-3 py-2 font-mono text-md uppercase text-neutral-800 placeholder-neutral-500 shadow-inner outline-none transition-[border-color,box-shadow] duration-150 focus:border-neutral-800 focus:ring-1 focus:ring-neutral-800"
                   />
                   {errorSala && (
                     <p className="font-typewriter text-xs text-red-600">{errorSala}</p>
@@ -191,7 +196,7 @@ export default function Home() {
                   type="text"
                   required
                   placeholder="Tu nombre"
-                  className="rounded-md border border-neutral-600 bg-neutral-800/5 px-3 py-2 font-mono text-md text-neutral-800 placeholder-neutral-500 shadow-inner outline-none transition-all duration-150 focus:border-neutral-800 focus:ring-1 focus:ring-neutral-800"
+                  className="rounded-md border border-neutral-600 bg-neutral-800/5 px-3 py-2 font-mono text-md text-neutral-800 placeholder-neutral-500 shadow-inner outline-none transition-[border-color,box-shadow] duration-150 focus:border-neutral-800 focus:ring-1 focus:ring-neutral-800"
                 />
               </div>
             </div>
@@ -199,7 +204,7 @@ export default function Home() {
             <button
               type="submit"
               disabled={pending}
-              className="mt-5 w-full rounded-lg bg-[#5b6a38] px-4 py-3 font-typewriter text-md tracking-widest text-neutral-100 shadow-md transition-all duration-150 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-5 w-full rounded-lg bg-[#5b6a38] px-4 py-3 font-typewriter text-md tracking-widest text-neutral-100 shadow-md transition-[filter,transform] duration-150 hover:brightness-110 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {activeTab === 'unirse'
                 ? pending
@@ -213,7 +218,7 @@ export default function Home() {
             <button
               type="button"
               onClick={() => setModalAbierto(true)}
-              className="mt-4 w-full rounded-lg bg-[#5b6a38] px-4 py-2.5 font-typewriter text-lg tracking-widest text-neutral-100 shadow-md transition-all duration-150 hover:brightness-110 active:scale-95"
+              className="mt-4 w-full rounded-lg bg-[#5b6a38] px-4 py-2.5 font-typewriter text-lg tracking-widest text-neutral-100 shadow-md transition-[filter,transform] duration-150 hover:brightness-110 active:scale-95"
             >
               ¿CÓMO JUGAR?
             </button>
