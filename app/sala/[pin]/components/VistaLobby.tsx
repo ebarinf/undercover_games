@@ -52,7 +52,7 @@ export default function VistaLobby({ pin, loading, jugadores, isHost, onIniciarP
                   {jugadores.map((j) => (
                     <li
                       key={j.id}
-                      className="rounded-full bg-neutral-800/10 px-4 py-1.5 font-typewriter text-sm text-neutral-700 transition-all duration-200 hover:brightness-110"
+                      className="rounded-full bg-neutral-800/10 px-4 py-1.5 font-typewriter text-sm text-neutral-700 transition-[filter] duration-200 hover:brightness-110"
                     >
                       {j.nickname}
                     </li>
@@ -65,7 +65,7 @@ export default function VistaLobby({ pin, loading, jugadores, isHost, onIniciarP
           {isHost ? (
             <button
               onClick={onIniciarPartida}
-              className="w-full cursor-pointer rounded-lg bg-[#5b6a38] px-6 py-4 font-typewriter text-lg font-bold text-[#f4ebd0] shadow-md transition-all duration-200 hover:brightness-110 active:scale-95 md:text-xl"
+              className="w-full cursor-pointer rounded-lg bg-[#5b6a38] px-6 py-4 font-typewriter text-lg font-bold text-[#f4ebd0] shadow-md transition-[filter,transform] duration-200 hover:brightness-110 active:scale-95 md:text-xl"
             >
               EMPEZAR PARTIDA
             </button>

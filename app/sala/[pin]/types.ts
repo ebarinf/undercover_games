@@ -17,4 +17,6 @@ export type DatosSala = {
   pregunta_impostor: string
   preguntas_usadas: string[]
   ronda_actual: number
+  timer_started_at: string | null
+  timer_duration_seconds: number | null
 }

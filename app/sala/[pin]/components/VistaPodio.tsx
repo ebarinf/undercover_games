@@ -52,7 +52,7 @@ export default function VistaPodio({ jugadores, isHost, salaId }: Props) {
               return (
                 <div
                   key={j.id}
-                  className={`flex items-center justify-between rounded-lg border px-4 py-3 shadow-inner transition-all duration-200 hover:brightness-110 ${
+                  className={`flex items-center justify-between rounded-lg border px-4 py-3 shadow-inner transition-[filter] duration-200 hover:brightness-110 ${
                     esPrimero
                       ? 'border-yellow-600 bg-yellow-500/10 shadow-lg shadow-yellow-600/20'
                       : 'border-neutral-500 bg-black/5'
@@ -75,7 +75,7 @@ export default function VistaPodio({ jugadores, isHost, salaId }: Props) {
           {isHost && (
             <button
               onClick={() => reiniciarPartida(salaId)}
-              className="w-full cursor-pointer rounded-lg bg-[#5b6a38] px-6 py-4 font-typewriter text-lg font-bold text-[#f4ebd0] shadow-md transition-all duration-200 hover:brightness-110 active:scale-95 md:text-xl"
+              className="w-full cursor-pointer rounded-lg bg-[#5b6a38] px-6 py-4 font-typewriter text-lg font-bold text-[#f4ebd0] shadow-md transition-[filter,transform] duration-200 hover:brightness-110 active:scale-95 md:text-xl"
             >
               🔄 JUGAR DE NUEVO (VOLVER AL LOBBY)
             </button>

@@ -3,11 +3,12 @@
 
 import React from 'react'
 import { supabase } from '@/utils/supabase'
-import { iniciarPartida, enviarRespuesta, enviarVoto, siguienteRonda } from '@/app/actions'
+import { iniciarPartida, enviarRespuesta, enviarVoto, siguienteRonda, forzarTransicion } from '@/app/actions'
 
 import type { Jugador, DatosSala } from './types'
 import VistaLobby from './components/VistaLobby'
 import VistaEscribiendo from './components/VistaEscribiendo'
+import VistaDiscusion from './components/VistaDiscusion'
 import VistaVotando from './components/VistaVotando'
 import VistaResultados from './components/VistaResultados'
 import VistaPodio from './components/VistaPodio'
@@ -115,9 +116,10 @@ export default function SalaPage({ params }: { params: Promise<{ pin: string }> 
     setHaVotado(true)
   }
 
-  async function handleEnviarRespuesta() {
-    if (!miJugadorId || !datosSala || !textoRespuesta.trim()) return
-    await enviarRespuesta(miJugadorId, textoRespuesta, datosSala.id)
+  async function handleEnviarRespuesta(overrideAnswer?: string) {
+    const answer = overrideAnswer ?? textoRespuesta
+    if (!miJugadorId || !datosSala || !answer.trim()) return
+    await enviarRespuesta(miJugadorId, answer, datosSala.id)
     setHaRespondido(true)
   }
 
@@ -127,6 +129,15 @@ export default function SalaPage({ params }: { params: Promise<{ pin: string }> 
         jugadores={jugadores}
         isHost={isHost}
         salaId={datosSala.id}
+      />
+    )
+  }
+
+  if (datosSala?.status === 'jugando' && datosSala?.fase === 'discusion') {
+    return (
+      <VistaDiscusion
+        datosSala={datosSala}
+        jugadores={jugadores}
       />
     )
   }

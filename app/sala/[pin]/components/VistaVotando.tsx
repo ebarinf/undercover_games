@@ -1,5 +1,8 @@
 import React from 'react'
+import { forzarTransicion } from '@/app/actions'
 import type { Jugador, DatosSala } from '../types'
+import EstampaTinta from './EstampaTinta'
+import { useServerCountdown } from '../hooks/useServerCountdown'
 
 type Props = {
   datosSala: DatosSala
@@ -10,6 +13,18 @@ type Props = {
 }
 
 export default function VistaVotando({ datosSala, jugadores, miJugadorId, haVotado, onVotar }: Props) {
+  const timerKey = `${datosSala.ronda_actual}-${datosSala.fase}`
+  const tiempoRestante = useServerCountdown(datosSala.timer_started_at, datosSala.timer_duration_seconds, timerKey)
+  const transicionRef = React.useRef(false)
+
+  React.useEffect(() => {
+    console.log('[VistaVotando] auto-advance check:', { tiempoRestante, transicionRef: transicionRef.current })
+    if (tiempoRestante !== 0 || transicionRef.current) return
+    transicionRef.current = true
+    console.log('[VistaVotando] AUTO-AVANCE por timer expirado')
+    forzarTransicion(datosSala.id)
+  }, [tiempoRestante, datosSala.id])
+
   return (
     <main
       className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out flex min-h-dvh items-center justify-center bg-[#2c1d11] bg-cover bg-center p-4"
@@ -31,9 +46,14 @@ export default function VistaVotando({ datosSala, jugadores, miJugadorId, haVota
         />
 
         <div className="flex flex-col items-center gap-6 px-5 pb-6 pt-14">
-          <p className="font-typewriter text-lg tracking-widest text-neutral-600 uppercase">
-            ¡HORA DE VOTAR!
-          </p>
+          <div className="flex w-full items-start justify-between">
+            <div className="flex flex-col gap-1">
+              <p className="font-typewriter text-lg tracking-widest text-neutral-600 uppercase">
+                ¡HORA DE VOTAR!
+              </p>
+            </div>
+            <EstampaTinta label="VOTACIÓN" segundos={tiempoRestante} />
+          </div>
 
           <p className="w-full break-words text-balance text-center font-typewriter text-xl font-bold tracking-normal text-neutral-900 md:text-2xl">
             {datosSala.pregunta_real}
@@ -48,7 +68,7 @@ export default function VistaVotando({ datosSala, jugadores, miJugadorId, haVota
                 {jugadores.map((j) => (
                   <div
                     key={j.id}
-                    className={`flex items-center gap-2 rounded-lg border border-neutral-400/50 px-3 py-2 font-typewriter text-sm transition-all duration-200 ${
+                    className={`flex items-center gap-2 rounded-lg border border-neutral-400/50 px-3 py-2 font-typewriter text-sm transition-[background-color,color] duration-200 ${
                       j.voto_actual
                         ? 'bg-neutral-800/10 text-neutral-700'
                         : 'bg-black/5 text-neutral-500'
@@ -65,7 +85,7 @@ export default function VistaVotando({ datosSala, jugadores, miJugadorId, haVota
               {jugadores.map((j) => (
                 <div
                   key={j.id}
-                  className="rounded-lg border border-neutral-500 bg-black/5 px-4 py-3 shadow-inner transition-all duration-200 hover:brightness-110"
+                  className="rounded-lg border border-neutral-500 bg-black/5 px-4 py-3 shadow-inner transition-[filter] duration-200 hover:brightness-110"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col items-start gap-1">
@@ -81,7 +101,7 @@ export default function VistaVotando({ datosSala, jugadores, miJugadorId, haVota
                     {j.id !== miJugadorId && !haVotado && (
                       <button
                         onClick={() => onVotar(j.id)}
-                        className="cursor-pointer rounded-md bg-[#5b6a38] px-4 py-2 font-typewriter text-sm font-bold text-[#f4ebd0] shadow-md transition-all duration-200 hover:brightness-110 active:scale-95"
+                        className="cursor-pointer rounded-md bg-[#5b6a38] px-4 py-2 font-typewriter text-sm font-bold text-[#f4ebd0] shadow-md transition-[filter,transform] duration-200 hover:brightness-110 active:scale-95"
                       >
                         Votar
                       </button>

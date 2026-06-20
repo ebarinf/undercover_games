@@ -75,7 +75,7 @@ export default function VistaResultados({ datosSala, jugadores, isHost, pin, onS
             </div>
           </div>
 
-          <div className="w-full rounded-lg border border-neutral-500 bg-black/5 px-4 py-4 shadow-inner transition-all duration-200 hover:brightness-110">
+          <div className="w-full rounded-lg border border-neutral-500 bg-black/5 px-4 py-4 shadow-inner transition-[filter] duration-200 hover:brightness-110">
             <p className="text-center font-typewriter text-sm tracking-widest text-neutral-600 uppercase">
               Su pregunta secreta era:
             </p>
@@ -94,7 +94,7 @@ export default function VistaResultados({ datosSala, jugadores, isHost, pin, onS
                 return (
                   <div
                     key={j.id}
-                    className="flex items-center justify-between rounded-lg border border-neutral-500 bg-black/5 px-4 py-3 text-left shadow-inner transition-all duration-200 hover:brightness-110"
+                    className="flex items-center justify-between rounded-lg border border-neutral-500 bg-black/5 px-4 py-3 text-left shadow-inner transition-[filter] duration-200 hover:brightness-110"
                   >
                     <span className="font-typewriter font-medium text-neutral-800">
                       {j.nickname}
@@ -112,7 +112,7 @@ export default function VistaResultados({ datosSala, jugadores, isHost, pin, onS
           {isHost && (
             <button
               onClick={onSiguienteRonda}
-              className="w-full cursor-pointer rounded-lg bg-[#5b6a38] px-6 py-4 font-typewriter text-lg font-bold text-[#f4ebd0] shadow-md transition-all duration-200 hover:brightness-110 active:scale-95 md:text-xl"
+              className="w-full cursor-pointer rounded-lg bg-[#5b6a38] px-6 py-4 font-typewriter text-lg font-bold text-[#f4ebd0] shadow-md transition-[filter,transform] duration-200 hover:brightness-110 active:scale-95 md:text-xl"
             >
               {esUltimaRonda
                 ? '🏆 VER PODIO FINAL'

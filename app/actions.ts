@@ -117,7 +117,11 @@ export async function enviarRespuesta(jugadorId: string, respuesta: string, sala
     if (todosRespondieron) {
         const { error: faseError } = await supabase
             .from('Sala')
-            .update({ fase: 'votando' })
+            .update({
+                fase: 'discusion',
+                timer_started_at: new Date().toISOString(),
+                timer_duration_seconds: 25,
+            })
             .eq('id', salaId)
 
         if (faseError) {
@@ -212,12 +216,99 @@ export async function enviarVoto(miJugadorId: string, idVotado: string, salaId: 
 
     const { error: faseError } = await supabase
         .from('Sala')
-        .update({ fase: 'resultados' })
+        .update({
+            fase: 'resultados',
+            timer_started_at: null,
+            timer_duration_seconds: null,
+        })
         .eq('id', salaId)
 
     if (faseError) {
         console.error('❌ ERROR AL CAMBIAR FASE:', faseError)
     }
+}
+
+export async function forzarTransicion(salaId: string) {
+    const { data: sala } = await supabase
+        .from('Sala')
+        .select('*')
+        .eq('id', salaId)
+        .single()
+
+    if (!sala) return
+
+    if (sala.fase === 'discusion') {
+        await supabase
+            .from('Sala')
+            .update({
+                fase: 'votando',
+                timer_started_at: new Date().toISOString(),
+                timer_duration_seconds: 60,
+            })
+            .eq('id', salaId)
+        return
+    }
+
+    if (sala.fase !== 'votando') return
+
+    const { data: jugadores } = await supabase
+        .from('Jugador')
+        .select('*')
+        .eq('sala_id', salaId)
+
+    if (!jugadores) return
+
+    const conteoVotos: Record<string, number> = {}
+    jugadores.forEach((j) => {
+        if (j.voto_actual) {
+            conteoVotos[j.voto_actual] = (conteoVotos[j.voto_actual] || 0) + 1
+        }
+    })
+
+    const maxVotos = Math.max(0, ...Object.values(conteoVotos))
+    const masVotados = Object.entries(conteoVotos)
+        .filter(([, count]) => count === maxVotos)
+        .map(([id]) => id)
+    const hayEmpate = masVotados.length > 1
+
+    const impostorAtrapado = !hayEmpate && masVotados[0] === sala.impostor_id
+
+    if (impostorAtrapado) {
+        const { data: votantes } = await supabase
+            .from('Jugador')
+            .select('id, puntos')
+            .eq('voto_actual', sala.impostor_id)
+            .eq('sala_id', salaId)
+
+        for (const v of votantes ?? []) {
+            await supabase
+                .from('Jugador')
+                .update({ puntos: (v.puntos ?? 0) + 100 })
+                .eq('id', v.id)
+        }
+    } else {
+        const { data: impostor } = await supabase
+            .from('Jugador')
+            .select('puntos')
+            .eq('id', sala.impostor_id)
+            .single()
+
+        if (impostor) {
+            await supabase
+                .from('Jugador')
+                .update({ puntos: (impostor.puntos ?? 0) + 200 })
+                .eq('id', sala.impostor_id)
+        }
+    }
+
+    await supabase
+        .from('Sala')
+        .update({
+            fase: 'resultados',
+            timer_started_at: null,
+            timer_duration_seconds: null,
+        })
+        .eq('id', salaId)
 }
 
 export async function siguienteRonda(salaId: string, pin: string) {
@@ -237,7 +328,12 @@ export async function siguienteRonda(salaId: string, pin: string) {
     if (sala.ronda_actual >= MAX_RONDAS) {
         await supabase
             .from('Sala')
-            .update({ fase: 'podio', status: 'finalizado' })
+            .update({
+                fase: 'podio',
+                status: 'finalizado',
+                timer_started_at: null,
+                timer_duration_seconds: null,
+            })
             .eq('id', salaId)
 
         await supabase
@@ -303,6 +399,8 @@ export async function siguienteRonda(salaId: string, pin: string) {
             pregunta_impostor: elegida.pregunta_impostor,
             preguntas_usadas: nuevasUsadas,
             ronda_actual: nuevaRonda,
+            timer_started_at: new Date().toISOString(),
+            timer_duration_seconds: 60,
         })
         .eq('id', salaId)
 
@@ -368,6 +466,8 @@ export async function iniciarPartida(pin: string) {
             pregunta_impostor: elegida.pregunta_impostor,
             preguntas_usadas: nuevasUsadas,
             ronda_actual: 1,
+            timer_started_at: new Date().toISOString(),
+            timer_duration_seconds: 60,
         })
         .eq('codigo', pin)
 
@@ -387,6 +487,8 @@ export async function reiniciarPartida(salaId: string) {
             impostor_id: null,
             pregunta_real: null,
             pregunta_impostor: null,
+            timer_started_at: null,
+            timer_duration_seconds: null,
         })
         .eq('id', salaId)
 
@@ -424,6 +526,8 @@ export async function resetearSala(pin: string) {
             pregunta_impostor: null,
             preguntas_usadas: [],
             ronda_actual: 0,
+            timer_started_at: null,
+            timer_duration_seconds: null,
         })
         .eq('id', sala.id)
 

@@ -1,5 +1,7 @@
 import React from 'react'
 import type { Jugador, DatosSala } from '../types'
+import EstampaTinta from './EstampaTinta'
+import { useServerCountdown } from '../hooks/useServerCountdown'
 
 type Props = {
   datosSala: DatosSala
@@ -8,7 +10,7 @@ type Props = {
   textoRespuesta: string
   onTextoRespuestaChange: (value: string) => void
   haRespondido: boolean
-  onEnviarRespuesta: () => void
+  onEnviarRespuesta: (overrideAnswer?: string) => void
 }
 
 export default function VistaEscribiendo({
@@ -21,6 +23,19 @@ export default function VistaEscribiendo({
   onEnviarRespuesta,
 }: Props) {
   const esImpostor = miJugadorId === datosSala.impostor_id
+  const timerKey = `${datosSala.ronda_actual}-${datosSala.fase}`
+  const tiempoRestante = useServerCountdown(datosSala.timer_started_at, datosSala.timer_duration_seconds, timerKey)
+  const autoSubmitRef = React.useRef(false)
+
+  React.useEffect(() => {
+    console.log('[VistaEscribiendo] auto-advance check:', { tiempoRestante, haRespondido, autoSubmitRef: autoSubmitRef.current })
+    if (tiempoRestante !== 0 || haRespondido || autoSubmitRef.current) return
+    autoSubmitRef.current = true
+    console.log('[VistaEscribiendo] AUTO-SUBMIT por timer expirado')
+    const respuesta = textoRespuesta.trim() || '—'
+    onTextoRespuestaChange(respuesta)
+    onEnviarRespuesta(respuesta)
+  }, [tiempoRestante, haRespondido, textoRespuesta, onTextoRespuestaChange, onEnviarRespuesta])
 
   return (
     <main
@@ -43,9 +58,12 @@ export default function VistaEscribiendo({
         />
 
         <div className="flex flex-col items-center gap-6 px-5 pb-6 pt-14">
-          <p className="font-typewriter text-sm tracking-widest text-neutral-600 uppercase">
-            RONDA {datosSala.ronda_actual} — EXPEDIENTE
-          </p>
+          <div className="flex w-full items-center justify-between">
+            <p className="font-typewriter text-sm tracking-widest text-neutral-600 uppercase">
+              RONDA {datosSala.ronda_actual} — EXPEDIENTE
+            </p>
+            <EstampaTinta label="RESPUESTA" segundos={tiempoRestante} />
+          </div>
 
           <p className="w-full break-words text-balance text-center font-typewriter text-2xl font-bold tracking-normal text-neutral-900 md:text-3xl">
             {esImpostor ? datosSala.pregunta_impostor : datosSala.pregunta_real}
@@ -64,7 +82,7 @@ export default function VistaEscribiendo({
                   {jugadores.map((j) => (
                     <div
                       key={j.id}
-                      className={`flex items-center gap-2 rounded-lg border border-neutral-400/50 px-3 py-2 font-typewriter text-sm transition-all duration-200 ${
+                      className={`flex items-center gap-2 rounded-lg border border-neutral-400/50 px-3 py-2 font-typewriter text-sm transition-[background-color,color] duration-200 ${
                         j.respuesta_actual
                           ? 'bg-neutral-800/10 text-neutral-700'
                           : 'bg-black/5 text-neutral-500'
@@ -80,15 +98,15 @@ export default function VistaEscribiendo({
           ) : (
             <>
               <textarea
-                className="w-full rounded-lg border border-neutral-500 bg-neutral-800/5 px-4 py-3 font-mono text-neutral-800 placeholder-neutral-500 shadow-inner outline-none transition-all duration-200 focus:border-neutral-800 focus:ring-1 focus:ring-neutral-800"
+                className="w-full rounded-lg border border-neutral-500 bg-neutral-800/5 px-4 py-3 font-mono text-neutral-800 placeholder-neutral-500 shadow-inner outline-none transition-[border-color,box-shadow] duration-200 focus:border-neutral-800 focus:ring-1 focus:ring-neutral-800"
                 rows={4}
                 placeholder="Escribe tu respuesta..."
                 value={textoRespuesta}
                 onChange={(e) => onTextoRespuestaChange(e.target.value)}
               />
               <button
-                onClick={onEnviarRespuesta}
-                className="w-full cursor-pointer rounded-lg bg-[#5b6a38] px-6 py-4 font-typewriter text-lg font-bold text-[#f4ebd0] shadow-md transition-all duration-200 hover:brightness-110 active:scale-95 md:text-xl"
+                onClick={() => onEnviarRespuesta()}
+                className="w-full cursor-pointer rounded-lg bg-[#5b6a38] px-6 py-4 font-typewriter text-lg font-bold text-[#f4ebd0] shadow-md transition-[filter,transform] duration-200 hover:brightness-110 active:scale-95 md:text-xl"
               >
                 ENVIAR RESPUESTA
               </button>

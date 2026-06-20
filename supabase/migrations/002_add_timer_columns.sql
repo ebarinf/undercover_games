@@ -1,0 +1,2 @@
+ALTER TABLE "Sala" ADD COLUMN IF NOT EXISTS timer_started_at TIMESTAMPTZ;
+ALTER TABLE "Sala" ADD COLUMN IF NOT EXISTS timer_duration_seconds INTEGER;
