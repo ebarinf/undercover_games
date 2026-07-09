@@ -14,7 +14,7 @@
 
 body {
   background-color: #211812;
-  background-image: url('/madera-oscura.jpg');
+  background-image: image-set(url('/madera-oscura.webp') type('image/webp'), url('/madera-oscura.jpg') type('image/jpeg'));
   background-size: cover;
   background-position: center;
   background-blend-mode: multiply;

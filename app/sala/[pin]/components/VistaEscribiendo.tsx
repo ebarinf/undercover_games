@@ -40,13 +40,16 @@ export default function VistaEscribiendo({
   return (
     <main
       className="animate-in fade-in slide-in-from-bottom-4 duration-500 ease-out flex min-h-dvh items-center justify-center bg-[#2c1d11] bg-cover bg-center p-4"
-      style={{ backgroundImage: 'url("/madera-oscura.jpg")' }}
+      style={{
+        backgroundImage:
+          "image-set(url('/madera-oscura.webp') type('image/webp'), url('/madera-oscura.jpg') type('image/jpeg'))",
+      }}
     >
       <div
         className="relative w-full max-w-md rounded-lg border border-neutral-700 shadow-2xl"
         style={{
           backgroundImage:
-            'linear-gradient(to right, #80808012 1px, transparent 1px), linear-gradient(to bottom, #80808012 1px, transparent 1px), url("/textura-manila.jpg")',
+            "linear-gradient(to right, #80808012 1px, transparent 1px), linear-gradient(to bottom, #80808012 1px, transparent 1px), image-set(url('/textura-manila.webp') type('image/webp'), url('/textura-manila.jpg') type('image/jpeg'))",
           backgroundSize: '24px 24px, 24px 24px, cover',
           backgroundPosition: '0 0, 0 0, center',
         }}
